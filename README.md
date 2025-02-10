@@ -1,52 +1,69 @@
-# 🚨 HỆ THỐNG NHẬN DẠNG TIN GIẢ | ELECTRA-Base 🚨
+# ✨ Phân tích Sắc Thái Cảm Xúc Bình Luận Trên Sàn Thương Mại Điện Tử ✨
 
-## 📌 Giới thiệu đề tài
-Tin giả (Fake News) đang trở thành vấn nạn nghiêm trọng trong thời đại số, đặc biệt trên các nền tảng mạng xã hội. Dự án này tập trung xây dựng hệ thống tự động phân loại tin giả tiếng Việt bằng mô hình **ELECTRA-Base**, kết hợp công nghệ NLP tiên tiến và bộ dữ liệu tin tức về chủ đề chính trị đa dạng.
+## 💡 Giới Thiệu Chung
+Trong bối cảnh phát triển mạnh mẽ của các sàn thương mại điện tử, các bình luận từ người tiêu dùng trở thành nguồn thông tin quan trọng giúp người mua đồ phân tích sản phẩm và nhà bán hàng cải thiện dịch vụ.
 
----
-## :tv: Demo
-![Demo](demo1.gif)
-- Xem DEMO đầy đủ tại đây: https://www.youtube.com/watch?v=HQ2c8JY_TXI&t=25s
----
-## 📂 Nguồn dữ liệu
-- **📰 Tin thật**: Thu thập từ các báo chính thống như VnExpress, Dân Trí, Thanh Niên (16,258 bài báo).
-- **📛 Tin giả**: Lấy từ các trang không chính thống như Viettan, Danlambao (16,086 bài báo).
-- **📊 Cấu trúc dữ liệu**: Bao gồm tiêu đề, nội dung, nguồn, nhãn (Real/Fake), thời gian đăng của bài báo.
+Dự án này nhằm mục tiêu giúp phân tích nhanh các bình luận và tìm hiểu xem nhận định của người dùng là tích cực hay tiêu cực từ đó đưa ra được nhận xét tổng thể là sản phẩm có nên mua hay là không!
 
----
-
-## 🔄 Quá trình thu thập và xử lý dữ liệu
-1. **🗂️ Thu thập dữ liệu**:
-   - Sử dụng các thư viện như Selenium, BeautifulSoup, Requests,.. để thu thập dữ liệu là các bài báo từ nguồn dữ liệu theo cấu trúc dữ liệu.
-   - Tham khảo code ở thư mục [crawl_data](./DATA/crawl_data)
-2. **🧹 Tiền xử lý**:
-   - Chuẩn hóa văn bản (chuyển chữ thường, xóa ký tự đặc biệt).
-   - Tách từ tiếng Việt (word_segmentation): [`NlpHUST/vi-word-segmentation`](https://huggingface.co/NlpHUST/vi-word-segmentation)
-   - Loại bỏ stopwords và cân bằng dữ liệu.
-     
-   ![Qui trình tiền xử lý dữ liệu](./Images/anh1.jpg)
-3. **📂 Phân chia tập dữ liệu**:
-   - **Train**: 60% (19,394 mẫu)
-   - **Validation**: 20% (6,464 mẫu)
-   - **Test**: 20% (6,468 mẫu)
-
----
-
-## 📊 Thống kê dữ liệu
-| Loại tin | Số lượng | Tỷ lệ |
-|----------|----------|-------|
-| 📰 Tin thật | 16,258   | 50.3% |
-| 📛 Tin giả  | 16,086   | 49.7% |
-
-![Phân bố từ sau tiền xử lý](./Images/anh2.jpg)
-
-![Phân bố từ sau tiền xử lý](./Images/img3.jpg)
+**Sentiment Analysis** là một kỹ thuật trong xử lý ngôn ngữ tự nhiên **(NLP)** dùng để xác định và phân loại cảm xúc (tích cực, tiêu cực) của văn bản. Đề tài này tập trung xây dựng một hệ thống phân tích cảm xúc hiệu quả, áp dụng mô hình **PhoBERT** kết hợp với **CNN** và **BiLSTM** để khai thác tối ưu đặc trưng ngữ nghĩa và ngữ cảnh trong bình luận tiếng Việt. Ngoài ra còn triển khai mô hình **ELECTRA-BASE** nhằm đánh giá xem mô hình trên được huấn luyện trên Embedding của PhoBert đã tới hạn với tập dữ liệu hay chưa, triển khai mô hình ELECTRA-Base loại bỏ hoàn toàn các lớp tùy chỉnh (CNN, BiLSTM, Attention) và dựa vào kiến trúc transformer của Electra để xem độ chính xác có được cải thiện hay không, khám phá khả năng của ELECTRA trong xử lý ngôn ngữ tiếng Việt. Nghiên cứu hứa hẹn mang lại giá trị ứng dụng cao và đóng góp vào việc xử lý ngôn ngữ tự nhiên cho tiếng Việt.
 
 ---
 
 ## 🛠️ Chức năng chính
 - **🔍 Phân loại tin giả**: Nhận đầu vào là văn bản, trả về nhãn "Thật"/"Giả" kèm xác suất.
 - **📊 Giao diện trực quan**: Biểu đồ pie chart.
+
+---
+
+## :tv: Demo
+![Demo](demo1.gif)
+- Xem DEMO đầy đủ tại đây: https://www.youtube.com/watch?v=HQ2c8JY_TXI&t=25sz
+  
+---
+
+## Tổng quan hệ thống và quy trình thực hiện 
+
+ ![Sơ đồ tổng quan hệ thống](./Images/img1.JPG)
+ 
+ ![Sơ đồ qui trình thực hiện](./Images/img2.JPG)
+ 
+---
+
+## 📂 Nguồn dữ liệu
+- **📰 Dữ liệu**: Thu thập từ các bình luận của sản phẩm từ các sàn thương mại điện tử như: Shopee, Lazada, Tiki, Sendo,...
+- **📊 Cấu trúc dữ liệu**: Bao gồm  nội dung của bình luận, nhãn (Tích cực/Tiêu cực).
+---
+
+## 🔄 Quá trình thu thập và xử lý dữ liệu
+1. **🗂️ Thu thập dữ liệu**:
+   - Sử dụng các thư viện như Selenium, BeautifulSoup, Requests,.. để thu thập dữ liệu là các bài báo từ nguồn dữ liệu theo cấu trúc dữ liệu.
+   - Gán nhãn cho dữ liệu: Sau bước thu thập dữ liệu bình luận là gán nhãn (tích cực: 0 , tiêu cực: 1) cho các bình luận dựa theo tiêu chí:
+      * Để đánh giá một nhãn của bình luận thì trước hết phải ưu tiên đến chất lượng của sản phẩm, ví dụ:
+         
+            + Sản phẩm rất đẹp, giao hàng nhanh - Nhãn tích cực: 0
+            + Sản phẩm kém chất lượng, giao hàng nhanh - Nhãn tiêu cực: 1
+      * Các bình luận trung lập thì phải dựa vào mức độ đánh giá giá sản phẩm để gán nhãn,ví dụ: 
+        
+            + Sản phẩm tốt, giao hàng hơi chậm - Nhãn tích cực: 0
+            + Sản phẩm tốt, giao hàng chậm, đóng gói sản phẩm kém - Nhãn tiêu cực: 1
+   - Tham khảo code ở thư mục [Crawl](./DATA/Crawl)
+2. **🧹 Tiền xử lý**:
+   - Chuẩn hóa văn bản (chuyển chữ thường, xóa ký tự đặc biệt).
+   - Tách từ tiếng Việt (word_segmentation): [`NlpHUST/vi-word-segmentation`](https://huggingface.co/NlpHUST/vi-word-segmentation)
+   - Loại bỏ stopwords và cân bằng dữ liệu.
+     
+   ![Qui trình tiền xử lý dữ liệu](./Images/img3.JPG)
+3. **📊 Thống kê dữ liệu**:
+   
+   | Loại bình luận | Số lượng | Tỷ lệ |
+   |----------------|----------|-------|
+   | 📰 Tích cực   | 17,312   | 50.2% |
+   | 📛 Tiêu cực   | 17,156   | 49.8% |
+
+4. **📂 Phân chia tập dữ liệu huấn luyện**:
+   - **Train**: 70% (24.127 mẫu)
+   - **Validation**: 15% (5.170 mẫu)
+   - **Test**: 15% (5.171 mẫu)
 
 ---
 
