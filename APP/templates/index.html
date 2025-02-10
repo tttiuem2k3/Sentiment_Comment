@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự đoán bình luận</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        
+        <form method="POST">
+            
+            <textarea name="comment" rows="8" placeholder="Nhập bình luận của bạn hoặc đường link sản phẩm cần check vào đây nha..." required></textarea>
+            <button type="submit">Dự đoán</button>
+            {% if product %}
+            <!-- Hiển thị hình ảnh -->
+            <div style="text-align: center; width: 97%; margin-left: 6px; ">
+                <img src="{{ product.image_url }}" alt="Hình ảnh sản phẩm" style="width: auto; height: 333px; border: 4px solid green; border-radius: 5px;">
+            </div>
+            <!-- Hiển thị tiêu đề -->
+            <b style="text-align: center;">Sản phẩm: {{ product.title }}</b>
+            <button class="button_2" type="button" onclick="scrollDown(800)">Xem phân tích</button>
+            {% endif %}
+            <script>
+                function scrollDown(offset) {
+                    window.scrollBy({ top: offset, behavior: 'smooth' });
+                }
+            </script>
+        </form>
+        {% if result %}
+        <div class="result" style="background: {% if result == 'Tích cực' %}linear-gradient(45deg, #96f696 , #dbfee0){% else %}linear-gradient(45deg, #ee9ca7 , #ffdde1){% endif %};">
+            <h2>Kết quả dự đoán</h2>
+            <p><strong>Bình luận:</strong> {{ comment }}</p>
+            <p><strong>Kết quả:</strong> {{ result }}</p>
+            <p><strong>Tỉ lệ:</strong> {{ probability }} %</p>
+            <!-- Biểu đồ hình tròn -->
+            <canvas id="sentimentChart"></canvas>
+            <script>
+                var ctx = document.getElementById('sentimentChart').getContext('2d');
+                var positiveProbability;
+                var negativeProbability;
+                var label = "{{ result }}"; // Dùng dấu ngoặc kép để xử lý chuỗi từ Jinja template
+
+                if (label === "Tích cực") {
+                    positiveProbability = {{ probability/100 }};
+                    negativeProbability = (1 - positiveProbability);
+                } else {
+                    negativeProbability = {{ probability/100 }};
+                    positiveProbability = (1 - negativeProbability);
+                }
+                var chart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Tích cực', 'Tiêu cực'],
+                        datasets: [{
+                            data: [positiveProbability, negativeProbability],
+                            backgroundColor: ['#36A2EB', '#FF5733'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        aspectRatio: 1.5, 
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        return tooltipItem.label + ': ' + (tooltipItem.raw * 100).toFixed(2) + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }   
+                });
+            </script>
+        </div>
+        {% endif %}
+        {% if bulk_results %}
+        <div class="result_table">
+            <h2>Kết quả phân tích cho sản phẩm</h2>
+            <table border="1", width=100%>
+                <thead>
+                    <tr>
+                        <th>Bình luận</th>
+                        <th>Kết quả</th>
+                        <th>Mức độ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in bulk_results %}
+                    <tr style="background-color: {% if res.result == 'Tích cực' %}#94de7b{% else %}#ec9c9c{% endif %};">
+                        <td>{{ res.comment }}</td>
+                        <td>{{ res.result }}</td>
+                        <td>{{ res.probability }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>            
+        </div>
+        {% endif %}
+    </div>
+    
+</body>
+
+</html>
