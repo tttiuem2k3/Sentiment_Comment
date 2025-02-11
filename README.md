@@ -17,8 +17,8 @@
 ---
 
 ## 🎥 Demo
-![Demo](demo1.gif)
-- 🎞️ Xem DEMO đầy đủ tại đây: https://www.youtube.com/watch?v=HQ2c8JY_TXI&t=25sz
+![Demo](video_git.gif)
+- 🎞️ Xem DEMO đầy đủ tại đây: [Sentiment Comment DEMO](https://www.youtube.com/watch?v=8SF3TNwdB6w&t=371s)
   
 ---
 
