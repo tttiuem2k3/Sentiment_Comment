@@ -10,8 +10,9 @@ Dự án này nhằm mục tiêu giúp phân tích nhanh các bình luận và t
 ---
 
 ## 🛠️ Chức năng chính
-- **🔍 Phân loại tin giả**: Nhận đầu vào là văn bản, trả về nhãn "Thật"/"Giả" kèm xác suất.
-- **📊 Giao diện trực quan**: Biểu đồ pie chart.
+- **Phân tích cảm xúc sắc thái**: Nhận đầu vào là văn bản, trả về nhãn là sắc thái tích cực hoặc tiêu cực kèm theo tỉ lệ nhằm đánh giá mức độ của sắc thái.
+- **Phân tích sản phẩm**: Nhận đầu vào là đường link liên kết đến sản phẩm trên sàn thương mại điện tử, trả về nhận xét tổng quan và bảng phân tích chi tiết về sản phẩm.
+- **📊 Giao diện trực quan**: Biểu đồ pie chart và bảng phân tích.
 
 ---
 
