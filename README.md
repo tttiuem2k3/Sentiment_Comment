@@ -67,88 +67,106 @@ Dự án này nhằm mục tiêu giúp phân tích nhanh các bình luận và t
 
 ---
 
-## 🚀 ELECTRA-Base: Giới thiệu và Sức mạnh
-### 🌟 Tổng quan
-**ELECTRA** (Efficiently Learning an Encoder that Classifies Token Replacements Accurately) là mô hình NLP sử dụng cơ chế **Replaced Token Detection**:
-- **Generator**: Tạo token giả thay thế ngẫu nhiên.
-- **Discriminator**: Phát hiện token bị thay thế, tối ưu hóa việc học toàn bộ đầu vào.
-  
-![cơ chế electra](./Images/img4.jpg)
-### 💪 Ưu điểm vượt trội
-| Ưu điểm                  | Hiệu quả                                                                 |
-|--------------------------|--------------------------------------------------------------------------|
-| **💻 Tiết kiệm tài nguyên**     | Chỉ cần 25% tài nguyên so với BERT/RoBERTa                               |
-| **📜 Xử lý văn bản dài**        | Áp dụng **Sliding Window** (512 tokens/window) với overlap 128 tokens    |
-| **🎯 Độ chính xác cao**         | F1-score đạt **99%** trên tập test                                       |
-| **🧠 Tích hợp Attention**       | Thêm Multihead Attention để tập trung vào từ khóa quan trọng            |
+# 🧠 Mô hình và Phương Pháp
 
-### 🔧 Cải tiến trong dự án
-1. **📜 Xử lý văn bản dài**:
-   - Chia văn bản thành các đoạn 512 tokens, kết hợp kỹ thuật overlap - cửa sổ trượt với độ trượt là 128 tokens.
-   - Dùng voting từ các đoạn để quyết định nhãn cuối cùng.
-2. **⚙️ Nâng cấp kiến trúc**:
-   - Thêm lớp **MultiheadAttention** và **LayerNorm**.
-   - Tích hợp Fully Connected layers để tối ưu biểu diễn đặc trưng.
-     
-![cải tiến mô hình electra](./Images/img5.jpg)
+## 1. **Mô hình PhoBERT kết hợp CNN và BiLSTM**
+  ![Mô hình PhoBert+CNN+Bilstm](./Images/img4.JPG)  
+### **Lý do sử dụng PhoBERT**
+- **Tokenizer và Embedding của PhoBERT**: PhoBERT là mô hình được huấn luyện đặc biệt trên dữ liệu tiếng Việt, sử dụng phương pháp **Byte Pair Encoding (BPE)** để xử lý văn bản tiếng Việt hiệu quả. Tokenizer của PhoBERT phân chia từ thành các token phù hợp với cấu trúc ngữ pháp tiếng Việt, đồng thời khớp hoàn hảo với embedding của PhoBERT.
+  ![Tokenizer PhoBERT](./Images/img5.JPG)  
+- **Embedding giàu ngữ nghĩa và ngữ cảnh**: 
+  - Biểu diễn từng từ dưới dạng vector 1024 chiều (với PhoBERT-large).
+  - Nắm bắt ý nghĩa của từ và ngữ cảnh trong câu. Ví dụ: Từ "lực" trong "lực lượng" và "hút lực" sẽ có embedding khác nhau.
+  ![PhoBERT Embedding](./Images/img6.JPG)  
+- **Ưu điểm của PhoBERT**: 
+  - Xử lý tốt các từ ghép, từ đồng âm, từ viết tắt, viết sai chính tả.
+  - Hiểu ngữ cảnh động và xử lý ngữ cảnh của từng từ trong câu, phù hợp với tiếng Việt phức tạp.
 
-### 🚀 Qui trình huấn luyện
-1. **🛠️ Cấu hình huấn luyện:**
-
-| Epochs      | BATH_SIZE | OPTIMIZER | DROPOUT |LEARNING_RATE|NUM_CLASSES| 
-|-------------|-----------|-----------|---------|-------------|-----------| 
-|    **4**    |  **48**   |**AdamW**  | **0.3** | **5e-5 -> 1e-5**|**2**| 
-
-2. **🗃️ Qui trình huấn luyện:**
-
-![qui trình huấn luyện](./Images/img6.jpg)
-
-
-## 📈 Kết quả
-| Model       | Accuracy | F1-score | Recall |
-|-------------|----------|----------|--------|
-| ELECTRA-Base| **99%**  | **99%**  | **99%**|
-
-![Ma trận nhầm lẫn](./Images/img9.jpg)
+### **Kiến trúc mô hình**
+- **CNN (Convolutional Neural Network)**: Trích xuất đặc trưng cục bộ từ embedding của PhoBERT (2 lớp CNN).
+  ![CNN](./Images/img7.JPG)
+  ![Attention Fusion](./Images/img8.JPG)
+- **BiLSTM (Bidirectional LSTM)**: Nắm bắt ngữ cảnh dài hạn từ cả hai chiều của chuỗi văn bản.
+  ![BiLSTM](./Images/img9.JPG)
+  ![Contextual Understanding](./Images/img10.JPG)  
+- **Fully Connected Layers**: Kết hợp các đặc trưng từ CNN và BiLSTM để đưa ra dự đoán cuối cùng.
+  ![Fully Connected Layers](./Images/img11.JPG)  
+### **Kết quả trên tập Test**
+- **Accuracy**: 95.13%
+- **Recall**: 95.13%
+- **F1-score**: 95.13%
+- **Positive**: 95.07%
+- **Negative**: 95.17%
+![Kết quả CNN-BiLSTM](./Images/img12.JPG)  
 
 ---
-## ⚖️ So sánh kết quả với Transformer-XL và PhoBERT
 
-Dưới đây là bảng so sánh kết quả giữa **ELECTRA-Base**, **Transformer-XL**, và **PhoBERT** trên tập dữ liệu test:
+## 2. **Mô hình ELECTRA-BASE**
 
-| Model           | Accuracy | F1-score | Recall | Parameters |
-|-----------------|----------|----------|--------|------------|
-| **ELECTRA-Base**| **99%**  | **99%**  | **99%**| 109M       |
-| Transformer-XL  | 94%      | 94%      | 94%    | 191M       |
-| PhoBERT         | 93%      | 93%      | 93%    | 135M       |
+### **Lý do sử dụng ELECTRA**
+- **Cơ chế Replaced Token Detection**: ELECTRA sử dụng cơ chế phát hiện token thay thế, giúp học biểu diễn hiệu quả hơn so với các phương pháp truyền thống như Masked Language Model (MLM) của BERT.
+- **Kiến trúc Transformer**: Loại bỏ các lớp tùy chỉnh (CNN, BiLSTM, Attention) và dựa hoàn toàn vào kiến trúc Transformer của ELECTRA để đánh giá hiệu suất.
+![Kiến trúc ELECTRA](./Images/img13.JPG)  
+### **Kết quả trên tập Test**
+- **Accuracy**: 96.65%
+- **Recall**: 96.65%
+- **F1-score**: 96.65%
+- **Positive**: 96.51%
+- **Negative**: 96.79%
 
-### 📊 Biểu đồ so sánh
-![Biểu đồ so sánh độ mất mát](./Images/img7.jpg)
 
-![Biểu đồ so sánh độ chính xác](./Images/img8.jpg)
-
-### 📝 Nhận xét
-- **ELECTRA-Base** cho kết quả **vượt trội** so với Transformer-XL và PhoBERT, đạt độ chính xác **99%**.
-- **Transformer-XL** và **PhoBERT** cũng cho kết quả tốt, nhưng độ chính xác thấp hơn (94% và 93%).
-- **ELECTRA-Base** sử dụng ít tham số hơn (109M) so với Transformer-XL (191M) và PhoBERT (135M), giúp tiết kiệm tài nguyên tính toán.
+![Kết quả ELECTRA](./Images/img14.JPG)  
 
 ---
+
+## 3. **So sánh hai mô hình**
+
+| Mô hình       | Accuracy | Recall | F1-score | Positive | Negative |
+|---------------|----------|--------|----------|----------|----------|
+| **CNN-BiLSTM** | 95.13%   | 95.13% | 95.13%   | 95.07%   | 95.17%   |
+| **ELECTRA**    | 96.65%   | 96.65% | 96.65%   | 96.51%   | 96.79%   |
+
+![So sánh hai mô hình: val_acc](./Images/img15.JPG)  
+![So sánh hai mô hình: val_loss](./Images/img16.JPG)  
+
+---
+
+## 4. **Thách thức và khó khăn**
+
+### **Thách thức liên quan đến dữ liệu**
+- **Ngôn ngữ không dấu**: Tiếng Việt có thể viết có dấu hoặc không dấu, gây khó khăn cho mô hình trong việc phân biệt nghĩa. Ví dụ: "tốt" và "tot", "kém" và "kem".
+- **Từ viết tắt và từ lóng**: Nhiều từ viết tắt hoặc tiếng lóng trên mạng xã hội. Ví dụ: "phim này ko hay", "ủa z là sao".
+- **Chất lượng dữ liệu**: Dữ liệu có thể chứa lỗi chính tả, ngôn ngữ không chuẩn mực hoặc cú pháp không đầy đủ.
+
+### **Thách thức trong mô hình CNN-BiLSTM**
+- **Xử lý chuỗi dài**: Tiếng Việt có câu dài và từ phức tạp, gây khó khăn cho BiLSTM trong việc nắm bắt toàn bộ thông tin.
+- **Kích thước embedding**: Tìm embedding phù hợp cho tiếng Việt (Word2Vec, FastText, BERT) là một thách thức lớn.
+
+---
+
+## 📝 Kết luận
+- **PhoBERT + CNN + BiLSTM** và **ELECTRA** đều cho kết quả tốt, với ELECTRA vượt trội hơn về độ chính xác.
+- Các thách thức về dữ liệu và ngôn ngữ tiếng Việt cần được giải quyết để cải thiện hiệu suất mô hình.
+
+---
+
 ## 🔮 Hướng phát triển
-- **🌍 Mở rộng sang đa ngôn ngữ** (tiếng Anh, Trung).
-- **🖼️ Tích hợp phân tích hình ảnh/video** bằng CNN.
-- **🌐 Xây dựng extension trình duyệt** để quét tin giả real-time.
+- **Mở rộng dữ liệu**: Thu thập thêm dữ liệu từ nhiều nguồn để đa dạng hóa ngữ cảnh và sắc thái cảm xúc. 
+- **Ứng dụng thực tế**: Triển khai API hoặc tích hợp vào các sàn thương mại điện tử. Phát triển ứng dụng di động để phân tích cảm xúc nhanh chóng.
+- **🌐 Nghiên cứu sâu hơn**: Phân tích ngữ cảnh đa chiều và xử lý câu phức tạp. Cải thiện khả năng hiểu ngữ cảnh văn hóa và xã hội.
+- **Tính năng mới**: Phân tích xu hướng cảm xúc theo thời gian. Gợi ý cải thiện sản phẩm dựa trên phản hồi khách hàng.
 
 ---
 
 ## 🛠️ Cài đặt
 ### Tải code:
 ```bash
-git clone https://github.com/your-repo/fake-news-detection
-cd fake-news-detection
+cd sentiment_comment
+git clone https://github.com/tttiuem2k3/Sentiment_Comment.git
 pip install -r requirements.txt
 ```
 ### Huấn luyện mô hình:
-- Huấn luyện mô hình dựa trên bộ data: [`DATA.rar`](./DATA/DATA.rar)
+- Huấn luyện mô hình dựa trên bộ data: [`COMMENT_DATA`](./DATA)
 - Tham khoản code huấn luyện mô hình: [`CODE`](./CODE)
 ### Chạy ứng dụng:
 Run python [`App.py`](./APP/App.py)
@@ -156,6 +174,6 @@ Run python [`App.py`](./APP/App.py)
 ---
 
 ##  📞 Liên hệ
-- 👥 Linkedin: https://www.linkedin.com/in/thinh-tran-04122k3/
+- 👥 Linkedin: [Thịnh Trần](https://www.linkedin.com/in/thinh-tran-04122k3/)
 
 - 📧 Email: tttiuem2k3@gmail.com
