@@ -106,7 +106,9 @@ Dự án này nhằm mục tiêu giúp phân tích nhanh các bình luận và t
 ### **Lý do sử dụng ELECTRA**
 - **Cơ chế Replaced Token Detection**: ELECTRA sử dụng cơ chế phát hiện token thay thế, giúp học biểu diễn hiệu quả hơn so với các phương pháp truyền thống như Masked Language Model (MLM) của BERT.
 - **Kiến trúc Transformer**: Loại bỏ các lớp tùy chỉnh (CNN, BiLSTM, Attention) và dựa hoàn toàn vào kiến trúc Transformer của ELECTRA để đánh giá hiệu suất.
-![Kiến trúc ELECTRA](./Images/img13.JPG)  
+![Kiến trúc ELECTRA](./Images/img13.JPG)
+### **Quy trình huấn luyện**
+![qui trình huấn luyện ELECTRA](./Images/img14.JPG)  
 ### **Kết quả trên tập Test**
 - **Accuracy**: 96.65%
 - **Recall**: 96.65%
@@ -115,7 +117,7 @@ Dự án này nhằm mục tiêu giúp phân tích nhanh các bình luận và t
 - **Negative**: 96.79%
 
 
-![Kết quả ELECTRA](./Images/img14.JPG)  
+![Kết quả ELECTRA](./Images/img15.JPG)  
 
 ---
 
@@ -126,8 +128,7 @@ Dự án này nhằm mục tiêu giúp phân tích nhanh các bình luận và t
 | **CNN-BiLSTM** | 95.13%   | 95.13% | 95.13%   | 95.07%   | 95.17%   |
 | **ELECTRA**    | 96.65%   | 96.65% | 96.65%   | 96.51%   | 96.79%   |
 
-![So sánh hai mô hình: val_acc](./Images/img15.JPG)  
-![So sánh hai mô hình: val_loss](./Images/img16.JPG)  
+![So sánh hai mô hình](./Images/img16.JPG)  
 
 ---
 
