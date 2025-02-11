@@ -1,7 +1,7 @@
 # ✨ Phân Tích Sắc Thái Cảm Xúc Bình Luận Trên Sàn Thương Mại Điện Tử ✨
 
 ## 💡 Giới Thiệu Chung
-🌍 Trong bối cảnh phát triển mạnh mẽ của các sàn thương mại điện tử, các bình luận từ người tiêu dùng trở thành nguồn thông tin quan trọng giúp người mua đồ phân tích sản phẩm và nhà bán hàng cải thiện dịch vụ.
+🌍 Trong bối cảnh phát triển mạnh mẽ của các sàn thương mại điện tử, các bình luận từ người tiêu dùng trở thành nguồn thông tin quan trọng giúp người mua đồ phân tích sản phẩm và nhà bán hàng cải thiện dịch vụ. 
 
 🎯 Dự án này nhằm mục tiêu giúp phân tích nhanh các bình luận và tìm hiểu xem nhận định của người dùng là tích cực hay tiêu cực từ đó đưa ra được nhận xét tổng thể là sản phẩm có nên mua hay là không!
 
